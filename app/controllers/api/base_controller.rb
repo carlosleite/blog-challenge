@@ -8,7 +8,11 @@ module Api
     end
 
     rescue_from ActiveRecord::RecordInvalid do |e|
-      render json: { message: e.record.messages }, status: :unprocessable_entity
+      render json: { message: e.record.errors.full_messages.to_sentence }, status: :unprocessable_entity
+    end
+
+    rescue_from ActiveRecord::RecordNotFound do |e|
+      render json: { message: e.message }, status: :not_found
     end
 
     rescue_from ArgumentError do |e|

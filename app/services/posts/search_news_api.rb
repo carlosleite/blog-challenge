@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Posts
-  # Fetch post from newsapi.org
+  # Fetch posts from newsapi.org
   class SearchNewsApi
     API_ENDPOINT = 'https://newsapi.org/v2/everything'
     SEARCH_TERM = 'watches'
