@@ -1,0 +1,11 @@
+AllCops:
+  Exclude:
+    - "bin/**/*"
+    - "log/**/*"
+    - "node_modules/**/*"
+    - "public/**/*"
+    - "script/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "db/**/*"
+    - "config/**/*"
