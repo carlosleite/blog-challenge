@@ -26,7 +26,8 @@ gem 'jbuilder', '~> 2.7'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
-#
+
+gem 'kaminari'
 
 gem 'foreman'
 
@@ -59,7 +60,10 @@ group :development do
 end
 
 group :test do
+  gem 'database_cleaner-active_record'
+  gem 'factory_bot_rails'
   gem 'rspec'
+  gem 'shoulda-matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

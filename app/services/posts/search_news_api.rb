@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Posts
+  # Fetch post from newsapi.org
   class SearchNewsApi
     API_ENDPOINT = 'https://newsapi.org/v2/everything'
     SEARCH_TERM = 'watches'
@@ -14,11 +15,18 @@ module Posts
 
       {
         posts: body['articles'],
-        meta: { prev_page: (page - 1), next_page: (page + 1) }
+        meta: pagination_info(page, body['totalResults'])
       }
     end
 
     private
+
+    def pagination_info(current_page, total)
+      {
+        prev_page: current_page > 1 ? current_page - 1 : nil,
+        next_page: (10 * current_page) >= total ? nil : current_page + 1
+      }
+    end
 
     def send_request(extra_params)
       params = extra_params.merge({ q: SEARCH_TERM, apiKey: ENV['NEWS_API_KEY'] })

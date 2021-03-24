@@ -2,6 +2,7 @@
 
 module Api
   module V1
+    # Post resource api controller
     class PostsController < Api::BaseController
       def index
         render json: Posts::Search.new(index_params).call

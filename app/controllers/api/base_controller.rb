@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Api
+  # base api controller
   class BaseController < ActionController::API
     rescue_from StandardError do |e|
       render json: { message: e.message }, status: :internal_server_error
