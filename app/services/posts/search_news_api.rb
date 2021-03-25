@@ -14,7 +14,7 @@ module Posts
       body = send_request(params)
 
       {
-        posts: body['articles'],
+        posts: body['articles'].each{ |post| post['type'] = 'remote' },
         meta: pagination_info(page, body['totalResults'])
       }
     end
