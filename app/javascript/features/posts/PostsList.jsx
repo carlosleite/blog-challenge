@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { capitalize, isEmpty, isNil } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from "react-router-dom";
 
 import { selectPostsByType, fetchPosts } from './postsSlice'
+import { Link } from "react-router-dom";
 
 const PostsList = ({ postsType }) => {
   const listTitle = `${capitalize(postsType)} posts`
   const dispatch = useDispatch()
+  const history = useHistory()
+
   const posts = useSelector((state) => selectPostsByType(state, postsType))
   const [currentPage, setCurrentPage] = useState(1)
   const uiMeta = useSelector((state) => state.posts.ui[postsType])
@@ -56,15 +60,27 @@ const PostsList = ({ postsType }) => {
     setCurrentPage(page)
   }
 
+  const goToPost = (post) => {
+    if (postsType === 'remote') {
+      window.open(post.url, '_blank')
+    } else {
+      history.push(`/posts/${post.id}`)
+    }
+  }
+
   return (
     <div>
       <h3 className="py-4 mb-4 border-bottom">
         {listTitle}
+
+        {postsType === 'local' &&
+          <Link className="btn btn-dark float-right" to="/posts/new">Add Post</Link>
+        }
       </h3>
 
       <div className="row mb-2">
         {posts.map((post, idx) => (
-          <div className="col-md-6" key={idx}>
+          <div className="col-md-6 blog-post-item" key={idx} onClick={() => goToPost(post)}>
             <div
               className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
               <div className="col p-4 d-flex flex-column position-static">

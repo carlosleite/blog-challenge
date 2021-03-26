@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { get } from 'axios'
+import { get, post, put, delete as deleteRequest} from 'axios'
 import { camelizeKeys } from 'humps'
 
 const API_URL = '/api/v1/posts'
@@ -26,6 +26,26 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (params) =>
   return response.data
 })
 
+export const fetchPost = createAsyncThunk('posts/fetchPost', async (postId) => {
+  const response = await get(`${API_URL}/${postId}`)
+  return response.data
+})
+
+export const createPost = createAsyncThunk('posts/create', async (params) => {
+  const response = await post(API_URL, { post: params })
+  return response.data
+})
+
+export const updatePost = createAsyncThunk('posts/update', async (params) => {
+  const response = await put(`${API_URL}/${params.id}`, { post: params })
+  return response.data
+})
+
+export const deletePost = createAsyncThunk('posts/delete', async (postId) => {
+  const response = await deleteRequest(`${API_URL}/${postId}`)
+  return response.data
+})
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
@@ -49,6 +69,26 @@ const postsSlice = createSlice({
       const postsType = action.meta.arg.source
       state.ui[postsType].loading = false
       state.error = action.payload
+    },
+    [fetchPost.pending]: (state) => {
+      state.ui.local.loading = true
+    },
+    [fetchPost.fulfilled]: (state, action) => {
+      state.ui.local.loading = false
+      state.posts = state.posts.concat(action.payload)
+    },
+    [fetchPost.rejected]: (state, action) => {
+      state.ui.local.loading = false
+      state.error = action.payload
+    },
+    [createPost.rejected]: (state, action) => {
+      state.error = action.payload
+    },
+    [updatePost.fulfilled]: (state, action) => {
+      state.posts = state.posts.filter((p) => p.id !== action.payload.id).concat(action.payload)
+    },
+    [updatePost.rejected]: (state, action) => {
+      state.error = action.payload
     }
   }
 })
@@ -56,3 +96,4 @@ const postsSlice = createSlice({
 export default postsSlice.reducer
 
 export const selectPostsByType = (state, type) => state.posts.posts.filter((p) => p.type === type)
+export const selectPostById = (state, postId) => state.posts.posts.find((p) => p.id === parseInt(postId))

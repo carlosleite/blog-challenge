@@ -8,4 +8,8 @@ Rails.application.routes.draw do
   end
 
   root 'static#index'
+  match "(*path)", to: "static#index",
+        defaults: { format: :html },
+        via: [:get],
+        constraints: ->(req) { req.format == :html }
 end
