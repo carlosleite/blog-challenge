@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { get, post, put, delete as deleteRequest} from 'axios'
+import { get, post, put, delete as deleteRequest } from 'axios'
 import { camelizeKeys } from 'humps'
 
 const API_URL = '/api/v1/posts'

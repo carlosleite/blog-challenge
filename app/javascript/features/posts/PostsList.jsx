@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { capitalize, isEmpty, isNil } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from 'react-router-dom'
 
 import { selectPostsByType, fetchPosts } from './postsSlice'
-import { Link } from "react-router-dom";
+import Loading from '../../components/Loading'
 
 const PostsList = ({ postsType }) => {
   const listTitle = `${capitalize(postsType)} posts`
@@ -37,11 +37,11 @@ const PostsList = ({ postsType }) => {
     )
   }
 
-  const PostThumbnail = ({ post }) => {
+  const PostThumbnail = ({ post, idx }) => {
     let imgUrl = post.urlToImage
 
     if (isEmpty(imgUrl)) {
-      imgUrl = 'https://picsum.photos/300/300'
+      imgUrl = `https://picsum.photos/300/300?random=${idx}`
     }
 
     const bgStyle = {
@@ -90,7 +90,10 @@ const PostsList = ({ postsType }) => {
                 </p>
               </div>
               <div className="col-auto d-none d-lg-block">
-                <PostThumbnail post={post}/>
+                <PostThumbnail
+                  post={post}
+                  idx={idx}
+                />
               </div>
             </div>
           </div>
@@ -98,11 +101,7 @@ const PostsList = ({ postsType }) => {
       </div>
 
       {uiMeta.loading && (
-        <div className="loading-indicator text-center">
-          <div className="spinner-grow text-secondary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
+        <Loading />
       )}
 
       <nav aria-label="Page navigation example">

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { capitalize, isEmpty, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { updatePost, fetchPost, selectPostById } from './postsSlice'
-import { useHistory } from "react-router-dom";
-import PostForm from "./PostForm";
+import { useHistory } from 'react-router-dom'
+import PostForm from './PostForm'
+import Loading from '../../components/Loading'
 
 const Post = ({ match }) => {
   const { postId } = match.params
@@ -13,6 +14,8 @@ const Post = ({ match }) => {
   const history = useHistory()
 
   const [loadingPost, setLoadingPost] = useState(true)
+  const [showSuccess, setShowSuccess] = useState(false)
+
   const post = useSelector((state) => selectPostById(state, postId))
 
   useEffect(() => {
@@ -22,15 +25,8 @@ const Post = ({ match }) => {
       })
   }, [dispatch])
 
-
   if (loadingPost) {
-    return (
-      <div className="loading-indicator text-center">
-        <div className="spinner-grow text-secondary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (!post) {
@@ -44,7 +40,10 @@ const Post = ({ match }) => {
       dispatch(updatePost({ ...postParams, id: postId }))
         .then(unwrapResult)
         .then(() => {
-          history.push(`/posts/${postId}`)
+          setShowSuccess(true)
+          setTimeout(() => {
+            history.push(`/posts/${postId}`)
+          }, 500)
         })
         .catch((err) => {
           console.error(err)
@@ -57,6 +56,11 @@ const Post = ({ match }) => {
       <div className="row">
         <div className="col-8 offset-2">
           <h3>Edit Post</h3>
+          {showSuccess && (
+            <div className="alert alert-success" role="alert">
+              Post updated
+            </div>
+          )}
           <PostForm
             post={post}
             submitHandler={submitHandler}

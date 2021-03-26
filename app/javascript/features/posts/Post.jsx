@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { fetchPost, selectPostById, deletePost } from './postsSlice'
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
+import Loading from '../../components/Loading'
 
 const Post = ({ match }) => {
   const { postId } = match.params
@@ -11,6 +12,8 @@ const Post = ({ match }) => {
   const history = useHistory()
 
   const [loadingPost, setLoadingPost] = useState(true)
+  const [showSuccess, setShowSuccess] = useState(false)
+
   const post = useSelector((state) => selectPostById(state, postId))
 
   useEffect(() => {
@@ -28,7 +31,10 @@ const Post = ({ match }) => {
     dispatch(deletePost(postId))
       .then(unwrapResult)
       .then(() => {
-        history.push('/')
+        setShowSuccess(true)
+        setTimeout(() => {
+          history.push('/')
+        }, 500)
       })
       .catch((err) => {
         console.error(err)
@@ -36,13 +42,7 @@ const Post = ({ match }) => {
   }
 
   if (loadingPost) {
-    return (
-      <div className="loading-indicator text-center">
-        <div className="spinner-grow text-secondary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
-    )
+    return <Loading />
   }
 
   if (!post) {
@@ -61,6 +61,11 @@ const Post = ({ match }) => {
             <button className="btn btn-dark" onClick={editPost}>Edit Post</button>
             <button className="btn btn-danger ml-3" onClick={deleteHandler}>Delete Post</button>
           </div>
+          {showSuccess && (
+            <div className="alert alert-success" role="alert">
+              Post deleted
+            </div>
+          )}
           <h3>{post.title}</h3>
           <p>
             {post.content}

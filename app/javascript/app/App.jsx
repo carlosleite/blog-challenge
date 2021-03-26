@@ -8,9 +8,9 @@ import {
 
 import Header from './Header'
 import PostsList from '../features/posts/PostsList'
-import NewPost from "../features/posts/NewPost"
+import NewPost from '../features/posts/NewPost'
 import Post from '../features/posts/Post'
-import EditPost from "../features/posts/EditPost";
+import EditPost from '../features/posts/EditPost'
 
 function App () {
   return (

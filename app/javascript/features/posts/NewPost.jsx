@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { createPost } from './postsSlice'
-import { useHistory } from "react-router-dom";
-import PostForm from "./PostForm";
+import { useHistory } from 'react-router-dom'
+import PostForm from './PostForm'
 
 const NewPost = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const initialPost = { title: '', content: '' }
 
@@ -17,7 +19,10 @@ const NewPost = () => {
       dispatch(createPost(postParams))
         .then(unwrapResult)
         .then(() => {
-          history.push('/')
+          setShowSuccess(true)
+          setTimeout(() => {
+            history.push('/')
+          }, 500)
         })
         .catch((err) => {
           console.log(err)
@@ -30,6 +35,11 @@ const NewPost = () => {
       <div className="row">
         <div className="col-8 offset-2">
           <h3>New Post</h3>
+          {showSuccess && (
+            <div className="alert alert-success" role="alert">
+              Post created
+            </div>
+          )}
           <PostForm
             post={initialPost}
             submitHandler={submitHandler}
