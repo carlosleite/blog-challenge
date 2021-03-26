@@ -5,16 +5,17 @@ module Posts
   class SearchNewsApi
     API_ENDPOINT = 'https://newsapi.org/v2/everything'
     SEARCH_TERM = 'watches'
+    PER_PAGE = 4
 
     def results(page)
       page = 1 unless page.positive?
 
-      params = { pageSize: 10, page: page }
+      params = { pageSize: PER_PAGE, page: page }
 
       body = send_request(params)
 
       {
-        posts: body['articles'].each{ |post| post['type'] = 'remote' },
+        posts: body['articles'].each { |post| post['type'] = 'remote' },
         meta: pagination_info(page, body['totalResults'])
       }
     end
@@ -24,7 +25,7 @@ module Posts
     def pagination_info(current_page, total)
       {
         prev_page: current_page > 1 ? current_page - 1 : nil,
-        next_page: (10 * current_page) >= total ? nil : current_page + 1
+        next_page: (PER_PAGE * current_page) >= total ? nil : current_page + 1
       }
     end
 

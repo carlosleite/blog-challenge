@@ -6,22 +6,22 @@ RSpec.describe 'Api::V1::Posts', type: :request do
   let(:parsed_response) { JSON.parse(response.body) }
 
   describe '#index' do
-    it 'returns 10 remote posts' do
+    it 'returns 4 remote posts' do
       get api_v1_posts_path, params: { source: 'remote' }
       expect(response).to have_http_status(:success)
 
-      expect(parsed_response['posts'].size).to eq(10)
+      expect(parsed_response['posts'].size).to eq(4)
       expect(parsed_response['meta']).to eq({ 'prev_page' => nil, 'next_page' => 2 })
     end
 
     context 'local posts' do
-      let!(:posts) { FactoryBot.create_list(:post, 12) }
+      let!(:posts) { FactoryBot.create_list(:post, 6) }
 
       it 'returns first 10 local posts' do
         get api_v1_posts_path, params: { source: 'local' }
         expect(response).to have_http_status(:success)
 
-        expect(parsed_response['posts'].size).to eq(10)
+        expect(parsed_response['posts'].size).to eq(4)
         expect(parsed_response['meta']).to eq({ 'prev_page' => nil, 'next_page' => 2 })
       end
 
