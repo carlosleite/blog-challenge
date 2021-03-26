@@ -1,24 +1,56 @@
-# README
+# Blog Coding Challenge
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Demo
+https://cl-fancy-blog.herokuapp.com/
 
-Things you may want to cover:
+## Description
+The app shows blog posts in two separated sections; one section for remote posts pulled from https://newsapi.org and the other section for local post that are stored in the app database.
 
-* Ruby version
+The user can add, update and delete the local posts.
 
-* System dependencies
+## Implementation
+The app is served as a Ruby On Rails app using React.js as a frontend.
 
-* Configuration
+All non api endpoints points to the `static#root` action that runs the React app.
 
-* Database creation
+Some of the libraries used for the React app:
+- react-redux
+- @reduxjs/toolkit
+- axios
+- humps
+- lodash
 
-* Database initialization
+## Running the app locally
 
-* How to run the test suite
+1. Clone this repo and config the database.yml
+2. Create a `.env` at the root of the project and add the hey `NEWS_API_KEY` with an api key from https://newsapi.org as value
+3. Install dependencies
+```
+bundle install
+yarn install
+```
+4. Set the database
+```bazaar
+rake db:create
+rake db:migrate
+```
+5. Run the app
+```bazaar
+foreman start -f Procfile
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Tests
+Tests was made using `rspec`
+```bazaar
+rspec
+```
 
-* Deployment instructions
-
-* ...
+## Code Analysis
+Ruby static code analysis:
+```bazaar
+rubocop
+```
+Javascript code analysis:
+```bazaar
+yarn lint
+```
