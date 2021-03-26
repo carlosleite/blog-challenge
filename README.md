@@ -13,6 +13,8 @@ The app is served as a Ruby On Rails app using React.js as a frontend.
 
 All non api endpoints points to the `static#root` action that runs the React app.
 
+Images that show up for local posts are pulled randomly from https://picsum.photos/
+
 Some of the libraries used for the React app:
 - react-redux
 - @reduxjs/toolkit
